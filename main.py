@@ -29,7 +29,7 @@ prediction_decoder = keras_cv.layers.MultiClassNonMaxSuppression(
 pretrained_model.prediction_decoder = prediction_decoder
 class_mapping = dict(zip(range(len(class_ids)), class_ids))
 
-cap = cv2.VideoCapture('C:/Users/Lenovo/Desktop/CD/TC/Cowzy/Data/Recordings/Color Basics 2023-06-15 11-19-08.mp4') #Color Basics 2023-06-15 10-51-19.mp4')
+cap = cv2.VideoCapture(0)
 
 # Check if camera opened successfully
 if (cap.isOpened() == False):
@@ -45,9 +45,9 @@ while (cap.isOpened()):
             confidence = y_pred['confidence'].numpy()[0, i]
             if confidence > 0.5:
                 idx = int(y_pred['classes'].numpy()[0, i])
-                if class_ids[idx] == "Cow":
-                    cow_box = y_pred['boxes'].numpy()[0, i, :]
-                    (startX, startY, endX, endY) = cow_box.astype("int")
+                if class_ids[idx] == "Person":
+                    object_box = y_pred['boxes'].numpy()[0, i, :]
+                    (startX, startY, endX, endY) = object_box.astype("int")
                     (startX, startY, endX, endY) = (startX, startY, startX + endX, startY + endY)
                     #print(startX, startY, endX, endY)
                     cv2.rectangle(image, (startX, startY), (endX, endY), (0, 255, 0), 5)
